@@ -5,6 +5,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView.ShowOtherDates;
 import com.prolificinteractive.materialcalendarview.format.DayFormatter;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
@@ -137,7 +138,8 @@ abstract class CalendarPagerAdapter<V extends CalendarPagerView> extends PagerAd
     public Object instantiateItem(ViewGroup container, int position) {
         V pagerView = createView(position);
         pagerView.setContentDescription(mcv.getCalendarContentDescription());
-        pagerView.setAlpha(0);
+        ViewPropertyAnimator animator = ViewPropertyAnimator.animate(pagerView);
+        animator.alpha(1);
         pagerView.setSelectionEnabled(selectionEnabled);
 
         pagerView.setWeekDayFormatter(weekDayFormatter);

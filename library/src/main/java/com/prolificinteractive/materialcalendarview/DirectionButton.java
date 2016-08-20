@@ -6,8 +6,10 @@ import android.os.Build;
 import android.util.TypedValue;
 import android.widget.ImageView;
 
+import com.nineoldandroids.view.ViewPropertyAnimator;
+
 /**
- * An {@linkplain android.widget.ImageView} to pragmatically set the color of arrows
+ * An {@linkplain ImageView} to pragmatically set the color of arrows
  * using a {@linkplain android.graphics.ColorFilter}
  */
 class DirectionButton extends ImageView {
@@ -25,7 +27,8 @@ class DirectionButton extends ImageView {
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        setAlpha(enabled ? 1f : 0.1f);
+        ViewPropertyAnimator animator = ViewPropertyAnimator.animate(this);
+        animator.alpha(enabled ? 1f : 0.1f);
     }
 
     private static int getThemeSelectableBackgroundId(Context context) {

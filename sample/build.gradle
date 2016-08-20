@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.prolificinteractive.materialcalendarview.sample"
-        minSdkVersion 14
+        minSdkVersion 10
         targetSdkVersion 23
         versionCode project.ext.versionCodeInt
         versionName version

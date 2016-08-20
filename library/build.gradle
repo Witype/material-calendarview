@@ -7,7 +7,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 10
         targetSdkVersion 23
         versionCode project.ext.versionCodeInt
         versionName version
@@ -16,7 +16,7 @@ android {
 
 dependencies {
     compile 'com.android.support:support-v4:23.4.0'
-
+    compile 'com.nineoldandroids:library:2.4.0'
     testCompile 'junit:junit:4.12'
 }
 

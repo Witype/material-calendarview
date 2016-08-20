@@ -1,6 +1,5 @@
 package com.prolificinteractive.materialcalendarview;
 
-import android.animation.Animator;
 import android.content.res.Resources;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -8,6 +7,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
 
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
 class TitleChanger {
@@ -58,45 +59,49 @@ class TitleChanger {
         doChange(currentTime, currentMonth, true);
     }
 
+    private ViewPropertyAnimator animator;
+
     private void doChange(final long now, final CalendarDay currentMonth, boolean animate) {
-
-        title.animate().cancel();
-        title.setTranslationY(0);
-        title.setAlpha(1);
+        if (animator != null) {
+            animator.cancel();
+            animator.translationY(0);
+            animator.alpha(1);
+        }
         lastAnimTime = now;
-
         final CharSequence newTitle = titleFormatter.format(currentMonth);
 
         if (!animate) {
             title.setText(newTitle);
         } else {
             final int yTranslation = yTranslate * (previousMonth.isBefore(currentMonth) ? 1 : -1);
-
-            title.animate()
-                    .translationY(yTranslation * -1)
+            animator = ViewPropertyAnimator.animate(title);
+            animator.translationY(yTranslation * -1)
                     .alpha(0)
                     .setDuration(animDuration)
                     .setInterpolator(interpolator)
-                    .setListener(new AnimatorListener() {
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {}
 
                         @Override
-                        public void onAnimationCancel(Animator animator) {
-                            title.setTranslationY(0);
-                            title.setAlpha(1);
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animator) {
+                        public void onAnimationEnd(Animator animation) {
                             title.setText(newTitle);
-                            title.setTranslationY(yTranslation);
-                            title.animate()
-                                    .translationY(0)
+                            animator.translationY(yTranslation);
+                            animator.translationY(0)
                                     .alpha(1)
                                     .setDuration(animDuration)
                                     .setInterpolator(interpolator)
-                                    .setListener(new AnimatorListener())
                                     .start();
                         }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                            animator.translationY(0)
+                                    .alpha(1);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {}
                     }).start();
         }
 
